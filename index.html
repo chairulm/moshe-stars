@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Moshe's Star Chart</title>
+<meta name="theme-color" content="#16284A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Star Chart">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="vendor/fonts/fonts.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrap gate" id="gate">
+  <h1>Moshe's Star Chart</h1>
+  <div class="card" id="gLoad"><p class="small" id="gLoadMsg" style="text-align:center">Loading…</p></div>
+
+  <form class="card" id="gSetup" hidden autocomplete="off">
+    <h2>First-time setup (Dad)</h2>
+    <p class="small">Create your password and a starting password for Moshe. He can change his own later. Passwords need at least 6 characters.</p>
+    <div class="fld"><label for="suDad">Dad's password</label><input id="suDad" type="password" autocomplete="new-password"></div>
+    <div class="fld"><label for="suDad2">Repeat Dad's password</label><input id="suDad2" type="password" autocomplete="new-password"></div>
+    <div class="fld"><label for="suMo">Moshe's starting password</label><input id="suMo" type="text" autocomplete="off"></div>
+    <p class="err" id="suErr" hidden></p>
+    <button class="btn primary" type="submit" id="suBtn">Create accounts</button>
+  </form>
+
+  <form class="card" id="gLogin" hidden>
+    <h2>Who's here?</h2>
+    <div class="pick"><button type="button" id="pickMo" class="sel">Moshe</button><button type="button" id="pickDad">Dad</button></div>
+    <div class="fld"><label for="lgPw" id="lgLbl">Moshe's password</label><input id="lgPw" type="password" autocomplete="current-password"></div>
+    <p class="err" id="lgErr" hidden></p>
+    <button class="btn primary" type="submit" id="lgBtn">Log in</button>
+  </form>
+</div>
+
+<div class="wrap" id="app" hidden>
+  <header class="top">
+    <div>
+      <h1>Moshe's Star Chart</h1>
+      <p class="sub" id="sub"></p>
+      <span class="who" id="who"></span>
+      <div class="acctbar"><button class="btn" id="pwBtn">Change password</button><button class="btn" id="outBtn">Log out</button></div>
+    </div>
+    <div class="weeknav">
+      <button id="prev" aria-label="Previous week">‹</button>
+      <span class="weeklabel" id="weeklabel">This week</span>
+      <button id="next" aria-label="Next week">›</button>
+    </div>
+  </header>
+
+  <section class="meter" aria-label="Stars this week">
+    <div class="count"><b id="total">0</b><span>/ <span id="max">45</span> stars this week</span><span id="pending" class="small"></span></div>
+    <div class="bar" id="bar"><div class="fill" id="fill" style="width:0"></div></div>
+    <p class="next" id="nextmsg"></p>
+    <div class="rewards" id="rewards"></div>
+  </section>
+
+  <section class="grid-card" aria-label="Weekday routine">
+    <table>
+      <thead><tr><th class="task">Task</th><th data-d="0">Mon</th><th data-d="1">Tue</th><th data-d="2">Wed</th><th data-d="3">Thu</th><th data-d="4">Fri</th><th>★</th></tr></thead>
+      <tbody id="tbody"></tbody>
+      <tfoot><tr><td style="text-align:left;padding-left:16px">Day total</td><td id="d0">0</td><td id="d1">0</td><td id="d2">0</td><td id="d3">0</td><td id="d4">0</td><td class="sum" id="dt">0</td></tr></tfoot>
+    </table>
+    <div class="legend">
+      <span><span class="badge cam" style="position:static"><svg viewBox="0 0 10 10"><circle cx="5" cy="5.5" r="2.4" fill="currentColor"/></svg></span>Photo added</span>
+      <span><span class="badge dad yes" style="position:static">✓</span>Dad gave a star</span>
+      <span><span class="badge dad no" style="position:static">✕</span>Dad said no star</span>
+    </div>
+  </section>
+
+  <div class="foot"><span class="status" id="status"></span></div>
+
+  <section class="history">
+    <h2>Past weeks</h2>
+    <div id="hist"><p class="empty">Finished weeks will show up here with their reward level.</p></div>
+  </section>
+</div>
+
+<div class="shade" id="shade" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+    <div><h3 id="shTitle">Task</h3><p class="meta" id="shMeta"></p></div>
+    <div class="box" id="selfBox">
+      <h4>Moshe's check</h4>
+      <div class="big" id="selfBtns"><button id="sYes" class="yes">★ I did it</button><button id="sNo" class="no">Not done</button></div>
+      <p class="small" id="selfRead"></p>
+      <img class="photo" id="photo" alt="Photo evidence" hidden>
+      <p class="small" id="photoMsg" hidden></p>
+      <div class="row" id="photoCtl">
+        <label class="filelabel"><input type="file" id="file" accept="image/*"><span id="addTxt">Add photo (optional)</span></label>
+        <button class="btn" id="rmPhoto" hidden>Remove photo</button>
+      </div>
+    </div>
+    <div class="box" id="dadBox">
+      <h4>Dad's score</h4>
+      <div class="big" id="dadBtns"><button id="dYes" class="yes">★ Give star</button><button id="dNo" class="no">No star</button></div>
+      <div id="dadEdit">
+        <label for="dNote" class="small">Reason (required when you change Moshe's score)</label>
+        <textarea id="dNote" placeholder="e.g. Guitar only 5 minutes today"></textarea>
+        <p class="small" id="dHint"></p>
+        <div class="row"><button class="btn primary" id="dSave">Save Dad's score</button><button class="btn" id="dUndo" hidden>Remove my score</button></div>
+      </div>
+      <p class="note" id="dadRead" hidden></p>
+    </div>
+    <p class="err" id="shErr" hidden></p>
+    <div class="row" style="justify-content:flex-end"><button class="btn" id="close">Close</button></div>
+  </div>
+</div>
+
+<div class="shade" id="pwShade" hidden>
+  <form class="sheet" id="pwForm" role="dialog" aria-modal="true" aria-labelledby="pwTitle" autocomplete="off">
+    <h3 id="pwTitle">Change your password</h3>
+    <div class="fld"><label for="pwOld">Current password</label><input id="pwOld" type="password" autocomplete="current-password"></div>
+    <div class="fld"><label for="pwNew">New password (at least 6 characters)</label><input id="pwNew" type="password" autocomplete="new-password"></div>
+    <div class="fld"><label for="pwNew2">Repeat new password</label><input id="pwNew2" type="password" autocomplete="new-password"></div>
+    <div class="box" id="resetBox" hidden>
+      <h4>Moshe forgot his password?</h4>
+      <p class="small">This makes a fresh login for Moshe with a new password. His stars and photos stay.</p>
+      <div class="fld"><label for="rsMo">New password for Moshe</label><input id="rsMo" type="text" autocomplete="off"></div>
+      <div class="row"><button class="btn" type="button" id="rsBtn">Reset Moshe's password</button></div>
+    </div>
+    <p class="err" id="pwErr" hidden></p>
+    <p class="small" id="pwOk" hidden></p>
+    <div class="row" style="justify-content:flex-end"><button class="btn" type="button" id="pwClose">Close</button><button class="btn primary" type="submit">Save new password</button></div>
+  </form>
+</div>
+
+<div class="offline" id="offline" hidden>Offline · changes will sync when you're back online</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
