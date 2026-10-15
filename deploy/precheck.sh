@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Read-only resource + readiness check for moshe-stars. Installs and changes NOTHING.
-# Usage: sudo bash deploy/precheck.sh --domain moshe.ch41.com [--quick]
+# Usage: sudo bash deploy/precheck.sh --domain moshe.ch-41.com [--quick]
 # Exit: 0 = ready, 1 = warnings, 2 = not ready.
 set -uo pipefail
 

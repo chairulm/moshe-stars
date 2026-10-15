@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Idempotent installer for moshe-stars (first install AND every update).
 # Usage (from inside the repo):
-#   sudo bash deploy/install.sh --domain moshe.ch41.com --email you@example.com
+#   sudo bash deploy/install.sh --domain moshe.ch-41.com --email you@example.com
 #   sudo bash deploy/install.sh                 # re-run with remembered domain/email
 #   sudo bash deploy/install.sh --no-domain     # HTTP on the server IP only
 # Options: --force (ignore precheck FAILs)

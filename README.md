@@ -5,7 +5,7 @@ A small installable web app (PWA) for Moshe's weekday routine. Moshe ticks his o
 - Opens in any phone browser and can be added to the home screen. No app store needed.
 - Moshe and Dad each have their own login. Moshe can change his own password. Dad can't log in as Moshe, but can reset Moshe's password.
 - Data is stored in Firebase (Firestore) and syncs live between phones. It also works offline and syncs when the phone is back online.
-- Hosted on the VPS at https://moshe.ch41.com (nginx, static files). Firebase SDK and fonts are vendored in `vendor/`, so no CDN is needed.
+- Hosted on the VPS at https://moshe.ch-41.com (nginx, static files). Firebase SDK and fonts are vendored in `vendor/`, so no CDN is needed.
 
 ## Rewards and tasks
 
@@ -27,13 +27,13 @@ Edit `GROUPS` and `REWARDS` at the top of `app.js`.
 5. Go to **Project settings (gear) → General → Your apps → Web (`</>`)**. Register the app (Hosting is not needed), then copy the `firebaseConfig` values into `firebase-config.js`.
 
 ### 2. Deploy to the VPS
-DNS first: add an A record for `moshe.ch41.com` pointing to the VPS IP.
+DNS first: add an A record for `moshe.ch-41.com` pointing to the VPS IP.
 
 ```bash
 sudo apt-get update && sudo apt-get install -y git
 git clone https://github.com/chairulm/moshe-stars.git && cd moshe-stars
-sudo bash deploy/precheck.sh --domain moshe.ch41.com            # read-only; fix any FAIL
-sudo bash deploy/install.sh --domain moshe.ch41.com --email chairul.manalu@gmail.com
+sudo bash deploy/precheck.sh --domain moshe.ch-41.com            # read-only; fix any FAIL
+sudo bash deploy/install.sh --domain moshe.ch-41.com --email chairul.manalu@gmail.com
 sudo bash /opt/moshe-stars/deploy/check.sh
 ```
 Updates: `cd ~/moshe-stars && git pull && sudo bash deploy/install.sh && sudo bash /opt/moshe-stars/deploy/check.sh`
@@ -41,7 +41,7 @@ Updates: `cd ~/moshe-stars && git pull && sudo bash deploy/install.sh && sudo ba
 `install.sh` is idempotent. It copies the site to `/opt/moshe-stars/www`, adds its own nginx site (not `default_server`, so other sites on the VPS are untouched), opens SSH/80/443 in ufw, enables fail2ban, gets a Let's Encrypt certificate, and stamps the service-worker version with the git commit so phones update.
 
 ### 3. Allow the domain in Firebase
-Go to **Authentication → Settings → Authorized domains → Add domain** and add `moshe.ch41.com`.
+Go to **Authentication → Settings → Authorized domains → Add domain** and add `moshe.ch-41.com`.
 
 ### 4. First run (do this right away)
 1. Open the app URL. The **First-time setup** screen appears.
